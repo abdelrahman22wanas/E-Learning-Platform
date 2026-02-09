@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.title }} - E-Learning{% endblock %}
+
+{% block content %}
+<section class="course-header">
+    <div>
+        <h1>{{ course.title }}</h1>
+        <p class="muted">Category: {{ course.category }}</p>
+        <p>{{ course.description }}</p>
+        <p class="muted">Instructor: {{ course.instructor.username }}</p>
+        {% if progress %}
+        <div class="progress-bar">
+            <div class="progress" style="width: {{ progress.progress_percent }}%;"></div>
+        </div>
+        <p class="muted">Progress: {{ progress.progress_percent }}%</p>
+        {% endif %}
+    </div>
+</section>
+
+<section>
+    <h2>Lessons</h2>
+    <ol class="lesson-list">
+        {% for lesson in lessons %}
+        <li>
+            <a href="/lessons/{{ lesson.id }}/">{{ lesson.title }}</a>
+            <span class="muted">{{ lesson.get_content_type_display }}</span>
+        </li>
+        {% empty %}
+        <li>No lessons yet.</li>
+        {% endfor %}
+    </ol>
+</section>
+{% endblock %}

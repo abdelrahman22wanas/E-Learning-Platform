@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses - E-Learning{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Courses</h1>
+    <form class="search-bar" method="get">
+        <input type="text" name="q" placeholder="Search courses" value="{{ query }}" />
+        <select name="category">
+            <option value="">All categories</option>
+            {% for value in categories %}
+            <option value="{{ value }}" {% if value == category %}selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+        </select>
+        <button class="button" type="submit">Filter</button>
+    </form>
+</section>
+
+<div class="card-grid">
+    {% for course in courses %}
+    <article class="card">
+        <h3>{{ course.title }}</h3>
+        <p class="muted">{{ course.category }}</p>
+        <p>{{ course.description|truncatechars:150 }}</p>
+        <a class="text-link" href="/courses/{{ course.id }}/">View details</a>
+    </article>
+    {% empty %}
+    <p>No courses found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ lesson.title }} - E-Learning{% endblock %}
+
+{% block content %}
+<section>
+    <h1>{{ lesson.title }}</h1>
+    <p class="muted">Course: {{ lesson.course.title }}</p>
+
+    {% if lesson.content_type == 'video' %}
+        <p>Video URL: <a href="{{ lesson.video_url }}">{{ lesson.video_url }}</a></p>
+    {% elif lesson.content_type == 'pdf' %}
+        <p>PDF URL: <a href="{{ lesson.pdf_url }}">{{ lesson.pdf_url }}</a></p>
+    {% else %}
+        <div class="lesson-text">
+            {{ lesson.text_content|linebreaks }}
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

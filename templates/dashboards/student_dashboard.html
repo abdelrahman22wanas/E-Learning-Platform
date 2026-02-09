@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard - E-Learning{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Student Dashboard</h1>
+    <p class="muted">Track your enrolled courses and progress.</p>
+</section>
+
+<section>
+    <h2>Enrolled Courses</h2>
+    <div class="card-grid">
+        {% for enrollment in enrollments %}
+        <article class="card">
+            <h3>{{ enrollment.course.title }}</h3>
+            <p class="muted">Enrolled on {{ enrollment.enrolled_at|date:'M d, Y' }}</p>
+            <a class="text-link" href="/courses/{{ enrollment.course.id }}/">View course</a>
+        </article>
+        {% empty %}
+        <p>No enrollments yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2>Progress</h2>
+    <div class="card-grid">
+        {% for entry in progress_entries %}
+        <article class="card">
+            <h3>{{ entry.course.title }}</h3>
+            <div class="progress-bar">
+                <div class="progress" style="width: {{ entry.progress_percent }}%;"></div>
+            </div>
+            <p class="muted">{{ entry.progress_percent }}% complete</p>
+            {% if entry.last_accessed_lesson %}
+            <p class="muted">Last lesson: {{ entry.last_accessed_lesson.title }}</p>
+            {% endif %}
+        </article>
+        {% empty %}
+        <p>No progress yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

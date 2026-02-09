@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - E-Learning{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div>
+        <h1>Learn with confidence</h1>
+        <p>Browse curated courses, track your progress, and pick up where you left off.</p>
+        <a class="button" href="/courses/">Explore Courses</a>
+    </div>
+</section>
+
+<section>
+    <h2>Featured Courses</h2>
+    <div class="card-grid">
+        {% for course in featured_courses %}
+        <article class="card">
+            <h3>{{ course.title }}</h3>
+            <p class="muted">{{ course.category }}</p>
+            <p>{{ course.description|truncatechars:140 }}</p>
+            <a class="text-link" href="/courses/{{ course.id }}/">View details</a>
+        </article>
+        {% empty %}
+        <p>No courses yet. Add one in the admin.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
