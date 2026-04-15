@@ -31,6 +31,24 @@ A Django-based e-learning platform with courses, lessons, enrollments, and progr
 5. Run the server:
    - `D:/PROJECTS/E-Learning/.venv/Scripts/python.exe manage.py runserver`
 
+## Deploy on Vercel
+This project is configured for Vercel with a Python serverless entrypoint at `api/index.py`.
+
+1. Import this repository in Vercel.
+2. In Vercel Project Settings, set these environment variables:
+   - `SECRET_KEY` (required)
+   - `DEBUG=False`
+   - `ALLOWED_HOSTS=.vercel.app`
+   - `CSRF_TRUSTED_ORIGINS=https://*.vercel.app`
+   - `DATABASE_URL` (recommended for production, e.g., Neon/Supabase/Postgres)
+3. Run database migrations against your production database:
+   - `python manage.py migrate`
+4. Redeploy.
+
+Notes:
+- If `DATABASE_URL` is not provided, SQLite is used (good for local development, not recommended for production on serverless).
+- Static files are served with WhiteNoise and Vercel static routing.
+
 ## API Endpoints
 - `POST /api/register/`
 - `POST /api/token/`
