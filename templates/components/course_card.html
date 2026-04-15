@@ -1,11 +1,18 @@
 <article class="card reveal">
     <div class="card-topline">
         <p class="muted">{{ course.category }}</p>
-        {% if course.lessons.count %}
-        <span class="pill">{{ course.lessons.count }} lessons</span>
+        {% if course.lesson_count %}
+        <span class="pill">{{ course.lesson_count }} lessons</span>
         {% endif %}
     </div>
     <h3>{{ course.title }}</h3>
     <p>{{ course.description|truncatechars:150 }}</p>
+    <div class="badge-row">
+        <span class="pill">{{ course.level_label }}</span>
+        <span class="pill">{{ course.estimated_duration }}</span>
+        {% if course.completion_percent != None %}
+        <span class="pill">{{ course.completion_percent|floatformat:0 }}% complete</span>
+        {% endif %}
+    </div>
     <a class="text-link" href="/courses/{{ course.id }}/">View details</a>
 </article>

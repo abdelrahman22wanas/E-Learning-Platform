@@ -24,6 +24,19 @@
 
 <section class="section-block">
     <div class="section-head">
+        <h2>{{ recommendations_title }}</h2>
+    </div>
+    <div class="card-grid">
+        {% for course in recommended_courses %}
+        {% include 'components/course_card.html' with course=course %}
+        {% empty %}
+        {% include 'components/empty_state.html' with title='No recommendations yet' message='Enroll in a course and we will tailor suggestions for you.' cta_url='/courses/' cta_label='Explore courses' %}
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="section-head">
         <h2>Why learners choose this platform</h2>
     </div>
     <div class="card-grid">

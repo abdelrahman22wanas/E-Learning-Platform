@@ -17,6 +17,22 @@
 </section>
 
 <section class="section-block">
+    {% if continue_progress and continue_url %}
+    <article class="card continue-panel reveal">
+        <p class="eyebrow">Continue learning</p>
+        <h2>{{ continue_progress.course.title }}</h2>
+        <p class="muted">You're currently at {{ continue_progress.progress_percent|floatformat:0 }}% completion.</p>
+        {% if continue_progress.last_accessed_lesson %}
+        <p class="muted">Last lesson: {{ continue_progress.last_accessed_lesson.title }}</p>
+        {% endif %}
+        <a class="button" href="{{ continue_url }}">Resume course</a>
+    </article>
+    {% else %}
+    {% include 'components/empty_state.html' with title='No active course yet' message='Start a course and your quick resume link will appear here.' cta_url='/courses/' cta_label='Find a course' %}
+    {% endif %}
+</section>
+
+<section class="section-block">
     <h2>Enrolled Courses</h2>
     <div class="card-grid">
         {% for enrollment in enrollments %}

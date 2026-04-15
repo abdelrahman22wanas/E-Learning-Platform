@@ -9,12 +9,70 @@ from progress.models import CourseProgress
 from users.models import User
 
 
+def _course_level(lesson_count):
+    if lesson_count <= 2:
+        return "Beginner"
+    if lesson_count <= 4:
+        return "Intermediate"
+    return "Advanced"
+
+
+def _attach_course_metadata(courses, user=None):
+    courses = list(courses)
+    progress_by_course = {}
+
+    if user and user.is_authenticated and courses:
+        progress_by_course = dict(
+            CourseProgress.objects.filter(student=user, course__in=courses).values_list(
+                "course_id", "progress_percent"
+            )
+        )
+
+    for course in courses:
+        lesson_count = course.lessons.count()
+        course.lesson_count = lesson_count
+        course.level_label = _course_level(lesson_count)
+        course.estimated_duration = f"{max(lesson_count * 15, 30)} min"
+        completion = progress_by_course.get(course.id)
+        course.completion_percent = float(completion) if completion is not None else None
+
+    return courses
+
+
 def home(request):
     try:
-        featured_courses = Course.objects.select_related("instructor").order_by("-created_at")[:6]
+        featured_courses = _attach_course_metadata(
+            Course.objects.select_related("instructor").order_by("-created_at")[:6],
+            request.user,
+        )
+
+        if request.user.is_authenticated:
+            enrolled_ids = Enrollment.objects.filter(student=request.user).values_list(
+                "course_id", flat=True
+            )
+            recommended_courses = _attach_course_metadata(
+                Course.objects.select_related("instructor")
+                .exclude(id__in=enrolled_ids)
+                .order_by("-created_at")[:3],
+                request.user,
+            )
+            recommendations_title = "Recommended for you"
+        else:
+            recommended_courses = featured_courses[:3]
+            recommendations_title = "Start with these courses"
     except DatabaseError:
         featured_courses = []
-    return render(request, "home.html", {"featured_courses": featured_courses})
+        recommended_courses = []
+        recommendations_title = "Start with these courses"
+    return render(
+        request,
+        "home.html",
+        {
+            "featured_courses": featured_courses,
+            "recommended_courses": recommended_courses,
+            "recommendations_title": recommendations_title,
+        },
+    )
 
 
 def course_list(request):
@@ -35,7 +93,10 @@ def course_list(request):
             "title": "title",
             "title_desc": "-title",
         }
-        courses = courses.order_by(sort_map.get(sort, "-created_at"))
+        courses = _attach_course_metadata(
+            courses.order_by(sort_map.get(sort, "-created_at")),
+            request.user,
+        )
 
         categories = (
             Course.objects.values_list("category", flat=True)
@@ -106,9 +167,25 @@ def student_dashboard(request):
         progress_entries = CourseProgress.objects.filter(student=request.user).select_related(
             "course", "last_accessed_lesson"
         )
+
+        continue_progress = (
+            progress_entries.filter(progress_percent__gt=0, progress_percent__lt=100)
+            .order_by("-updated_at")
+            .first()
+        )
+        if continue_progress is None:
+            continue_progress = progress_entries.order_by("-updated_at").first()
     except DatabaseError:
         enrollments = []
         progress_entries = []
+        continue_progress = None
+
+    continue_url = None
+    if continue_progress:
+        if continue_progress.last_accessed_lesson_id:
+            continue_url = f"/lessons/{continue_progress.last_accessed_lesson_id}/"
+        else:
+            continue_url = f"/courses/{continue_progress.course_id}/"
 
     return render(
         request,
@@ -116,6 +193,8 @@ def student_dashboard(request):
         {
             "enrollments": enrollments,
             "progress_entries": progress_entries,
+            "continue_progress": continue_progress,
+            "continue_url": continue_url,
         },
     )
 
@@ -126,7 +205,10 @@ def instructor_dashboard(request):
         return render(request, "dashboards/instructor_dashboard.html", {"courses": []})
 
     try:
-        courses = Course.objects.filter(instructor=request.user).order_by("-created_at")
+        courses = _attach_course_metadata(
+            Course.objects.filter(instructor=request.user).order_by("-created_at"),
+            request.user,
+        )
         enrollments = Enrollment.objects.filter(course__in=courses).count()
     except DatabaseError:
         courses = []
