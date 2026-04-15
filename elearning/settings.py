@@ -105,11 +105,13 @@ if not database_url:
 if os.environ.get('VERCEL') == '1' and database_url.startswith('sqlite:///') and not database_url.startswith('sqlite:////'):
     database_url = 'sqlite:////tmp/db.sqlite3'
 
+is_postgres_url = database_url.startswith('postgres://') or database_url.startswith('postgresql://')
+
 DATABASES = {
     'default': dj_database_url.parse(
         database_url,
         conn_max_age=600,
-        ssl_require=not DEBUG,
+        ssl_require=(not DEBUG and is_postgres_url),
     )
 }
 
