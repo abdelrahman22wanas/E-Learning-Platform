@@ -8,19 +8,38 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
     <header class="site-header">
         <div class="container header-content">
-            <a class="logo" href="/">E-Learning</a>
-            <nav class="nav">
-                <a href="/courses/">Courses</a>
-                <a href="/dashboard/student/">Student Dashboard</a>
-                <a href="/dashboard/instructor/">Instructor Dashboard</a>
+            <a class="logo" href="{% url 'home' %}">E-Learning</a>
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-label="Toggle navigation" data-menu-toggle>
+                Menu
+            </button>
+            <nav class="nav" data-nav>
+                <a href="{% url 'course_list' %}">Courses</a>
+                <a href="{% url 'student_dashboard' %}">Student Dashboard</a>
+                <a href="{% url 'instructor_dashboard' %}">Instructor Dashboard</a>
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'logout' %}">Sign out</a>
+                {% else %}
+                <a href="{% url 'login' %}">Sign in</a>
+                {% endif %}
             </nav>
         </div>
     </header>
 
-    <main class="container">
+    <main class="container" id="main-content">
         {% block content %}{% endblock %}
     </main>
+
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <p>E-Learning Platform</p>
+            <p class="muted">Build skills with practical, structured courses.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

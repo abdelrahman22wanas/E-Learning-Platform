@@ -3,26 +3,55 @@
 {% block title %}Home - E-Learning{% endblock %}
 
 {% block content %}
-<section class="hero">
-    <div>
-        <h1>Learn with confidence</h1>
-        <p>Browse curated courses, track your progress, and pick up where you left off.</p>
-        <a class="button" href="/courses/">Explore Courses</a>
+<section class="hero reveal">
+    <div class="hero-grid">
+        <div>
+            <p class="eyebrow">Practical online learning</p>
+            <h1>Master real skills with clear learning paths.</h1>
+            <p>Browse curated courses, track your progress, and keep momentum with focused lessons.</p>
+            <div class="hero-actions">
+                <a class="button" href="{% url 'course_list' %}">Explore Courses</a>
+                <a class="text-link" href="{% url 'student_dashboard' %}">Open Dashboard</a>
+            </div>
+        </div>
+        <div class="metric-grid">
+            {% include 'components/stat_tile.html' with label='Featured courses' value=featured_courses|length hint='Curated for fast progress' %}
+            {% include 'components/stat_tile.html' with label='Learning format' value='Video, Text, PDF' hint='Flexible for every learner' %}
+            {% include 'components/stat_tile.html' with label='Tracking' value='Live Progress' hint='Stay consistent and finish' %}
+        </div>
     </div>
 </section>
 
-<section>
-    <h2>Featured Courses</h2>
+<section class="section-block">
+    <div class="section-head">
+        <h2>Why learners choose this platform</h2>
+    </div>
+    <div class="card-grid">
+        <article class="card reveal">
+            <h3>Structured roadmap</h3>
+            <p>Each course follows a clear sequence so students know exactly what to do next.</p>
+        </article>
+        <article class="card reveal">
+            <h3>Progress feedback</h3>
+            <p>Track completion rates and last accessed lessons to keep learning habits strong.</p>
+        </article>
+        <article class="card reveal">
+            <h3>Instructor visibility</h3>
+            <p>Instructors can monitor engagement and keep content aligned with learner needs.</p>
+        </article>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="section-head">
+        <h2>Featured Courses</h2>
+        <a class="text-link" href="{% url 'course_list' %}">Browse all courses</a>
+    </div>
     <div class="card-grid">
         {% for course in featured_courses %}
-        <article class="card">
-            <h3>{{ course.title }}</h3>
-            <p class="muted">{{ course.category }}</p>
-            <p>{{ course.description|truncatechars:140 }}</p>
-            <a class="text-link" href="/courses/{{ course.id }}/">View details</a>
-        </article>
+        {% include 'components/course_card.html' with course=course %}
         {% empty %}
-        <p>No courses yet. Add one in the admin.</p>
+        {% include 'components/empty_state.html' with title='No courses yet' message='Run seed data or add your first course from admin.' cta_url='/admin/' cta_label='Open Admin' %}
         {% endfor %}
     </div>
 </section>

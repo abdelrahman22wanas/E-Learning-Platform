@@ -1,0 +1,11 @@
+<article class="card reveal">
+    <div class="card-topline">
+        <p class="muted">{{ course.category }}</p>
+        {% if course.lessons.count %}
+        <span class="pill">{{ course.lessons.count }} lessons</span>
+        {% endif %}
+    </div>
+    <h3>{{ course.title }}</h3>
+    <p>{{ course.description|truncatechars:150 }}</p>
+    <a class="text-link" href="/courses/{{ course.id }}/">View details</a>
+</article>

@@ -1,0 +1,7 @@
+<div class="empty-state reveal">
+    <h3>{{ title }}</h3>
+    <p class="muted">{{ message }}</p>
+    {% if cta_url and cta_label %}
+    <a class="button" href="{{ cta_url }}">{{ cta_label }}</a>
+    {% endif %}
+</div>

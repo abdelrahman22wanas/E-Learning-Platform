@@ -3,31 +3,39 @@
 {% block title %}Student Dashboard - E-Learning{% endblock %}
 
 {% block content %}
-<section class="page-header">
+<section class="page-header reveal">
+    <p class="eyebrow">Learning overview</p>
     <h1>Student Dashboard</h1>
     <p class="muted">Track your enrolled courses and progress.</p>
 </section>
 
-<section>
+<section class="section-block">
+    <div class="metric-grid metric-grid-compact">
+        {% include 'components/stat_tile.html' with label='Enrolled courses' value=enrollments|length hint='Active learning paths' %}
+        {% include 'components/stat_tile.html' with label='Progress entries' value=progress_entries|length hint='Courses with tracked progress' %}
+    </div>
+</section>
+
+<section class="section-block">
     <h2>Enrolled Courses</h2>
     <div class="card-grid">
         {% for enrollment in enrollments %}
-        <article class="card">
+        <article class="card reveal">
             <h3>{{ enrollment.course.title }}</h3>
             <p class="muted">Enrolled on {{ enrollment.enrolled_at|date:'M d, Y' }}</p>
             <a class="text-link" href="/courses/{{ enrollment.course.id }}/">View course</a>
         </article>
         {% empty %}
-        <p>No enrollments yet.</p>
+        {% include 'components/empty_state.html' with title='No enrollments yet' message='Explore courses and enroll to start your journey.' cta_url='/courses/' cta_label='Explore courses' %}
         {% endfor %}
     </div>
 </section>
 
-<section>
+<section class="section-block">
     <h2>Progress</h2>
     <div class="card-grid">
         {% for entry in progress_entries %}
-        <article class="card">
+        <article class="card reveal">
             <h3>{{ entry.course.title }}</h3>
             <div class="progress-bar">
                 <div class="progress" style="width: {{ entry.progress_percent }}%;"></div>
@@ -38,7 +46,7 @@
             {% endif %}
         </article>
         {% empty %}
-        <p>No progress yet.</p>
+        {% include 'components/empty_state.html' with title='No progress yet' message='Once you start lessons, progress stats will appear here.' %}
         {% endfor %}
     </div>
 </section>

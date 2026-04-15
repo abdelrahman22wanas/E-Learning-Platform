@@ -20,6 +20,7 @@ def home(request):
 def course_list(request):
     query = request.GET.get("q", "").strip()
     category = request.GET.get("category", "").strip()
+    sort = request.GET.get("sort", "newest").strip()
     try:
         courses = Course.objects.select_related("instructor")
 
@@ -28,10 +29,23 @@ def course_list(request):
         if category:
             courses = courses.filter(category__iexact=category)
 
-        categories = Course.objects.values_list("category", flat=True).distinct()
+        sort_map = {
+            "newest": "-created_at",
+            "oldest": "created_at",
+            "title": "title",
+            "title_desc": "-title",
+        }
+        courses = courses.order_by(sort_map.get(sort, "-created_at"))
+
+        categories = (
+            Course.objects.values_list("category", flat=True)
+            .distinct()
+            .order_by("category")
+        )
     except DatabaseError:
         courses = []
         categories = []
+        sort = "newest"
     return render(
         request,
         "courses/course_list.html",
@@ -39,6 +53,7 @@ def course_list(request):
             "courses": courses,
             "query": query,
             "category": category,
+            "sort": sort,
             "categories": categories,
         },
     )
