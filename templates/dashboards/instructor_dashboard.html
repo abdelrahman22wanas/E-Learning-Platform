@@ -22,7 +22,8 @@
         {% for course in courses %}
         {% include 'components/course_card.html' with course=course %}
         {% empty %}
-        {% include 'components/empty_state.html' with title='No courses created yet' message='Create your first course from admin to start teaching.' cta_url='/admin/' cta_label='Open admin' %}
+        {% url 'admin:index' as admin_index_url %}
+        {% include 'components/empty_state.html' with title='No courses created yet' message='Create your first course from admin to start teaching.' cta_url=admin_index_url cta_label='Open admin' %}
         {% endfor %}
     </div>
 </section>

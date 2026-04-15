@@ -74,7 +74,8 @@
         {% for course in featured_courses %}
         {% include 'components/course_card.html' with course=course %}
         {% empty %}
-        {% include 'components/empty_state.html' with title='No courses yet' message='Run seed data or add your first course from admin.' cta_url='/admin/' cta_label='Open Admin' %}
+        {% url 'admin:index' as admin_index_url %}
+        {% include 'components/empty_state.html' with title='No courses yet' message='Run seed data or add your first course from admin.' cta_url=admin_index_url cta_label='Open Admin' %}
         {% endfor %}
     </div>
 </section>

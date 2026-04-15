@@ -6,6 +6,9 @@
     --bg-glow-2: #d8f1ef;
     --surface: #fffdf8;
     --surface-strong: #fff;
+    --header-bg: rgba(255, 253, 248, 0.8);
+    --hero-bg-start: #fff;
+    --hero-bg-end: #f8f6f0;
     --text: #201e1a;
     --muted: #686258;
     --accent: #0f8c8c;
@@ -34,6 +37,9 @@
     --bg-glow-2: #0d3834;
     --surface: #111c24;
     --surface-strong: #162530;
+    --header-bg: rgba(11, 22, 30, 0.84);
+    --hero-bg-start: #13202b;
+    --hero-bg-end: #0f1821;
     --text: #e9f0f4;
     --muted: #9fb0bb;
     --accent: #27b6c2;
@@ -63,6 +69,9 @@ body {
     radial-gradient(circle at 18% 6%, var(--bg-glow-1) 0%, transparent 40%),
     radial-gradient(circle at 82% 0%, var(--bg-glow-2) 0%, transparent 36%),
         var(--bg);
+    transition:
+        background var(--duration-normal) var(--ease-standard),
+        color var(--duration-normal) var(--ease-standard);
 }
 
 h1,
@@ -121,9 +130,12 @@ a {
     position: sticky;
     top: 0;
     z-index: 50;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    border-bottom: 1px solid var(--border);
     backdrop-filter: blur(8px);
-    background: rgba(255, 253, 248, 0.8);
+    background: var(--header-bg);
+    transition:
+        background var(--duration-normal) var(--ease-standard),
+        border-color var(--duration-normal) var(--ease-standard);
 }
 
 .header-content {
@@ -249,11 +261,15 @@ a {
 
 .hero {
     margin-bottom: var(--space-6);
-    background: linear-gradient(145deg, #fff, #f8f6f0);
+    background: linear-gradient(145deg, var(--hero-bg-start), var(--hero-bg-end));
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-soft);
     padding: clamp(1.4rem, 3.5vw, 2.6rem);
+    transition:
+        background var(--duration-normal) var(--ease-standard),
+        border-color var(--duration-normal) var(--ease-standard),
+        box-shadow var(--duration-normal) var(--ease-standard);
 }
 
 .hero-grid {
@@ -341,6 +357,7 @@ a {
     border: 1px solid var(--border);
     box-shadow: var(--shadow-card);
     transition:
+        background var(--duration-normal) var(--ease-standard),
         transform var(--duration-normal) var(--ease-standard),
         box-shadow var(--duration-normal) var(--ease-standard),
         border-color var(--duration-fast) var(--ease-standard);
@@ -484,7 +501,7 @@ a {
 .search-bar input:focus,
 .search-bar select:focus,
 .auth-form input:focus {
-    outline: 2px solid color-mix(in srgb, var(--accent) 60%, white);
+    outline: 2px solid color-mix(in srgb, var(--accent) 60%, var(--surface-strong));
     outline-offset: 1px;
 }
 
@@ -506,7 +523,7 @@ a {
     border: 1px dashed var(--border);
     border-radius: var(--radius-md);
     padding: var(--space-4);
-    background: color-mix(in srgb, var(--surface) 80%, white);
+    background: color-mix(in srgb, var(--surface) 82%, var(--surface-strong));
 }
 
 .course-header {
@@ -518,14 +535,18 @@ a {
 }
 
 .continue-panel {
-    background: linear-gradient(135deg, #fffdfa 0%, #f0fcfb 100%);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--surface-strong) 96%, white), color-mix(in srgb, var(--surface) 90%, var(--accent-soft)));
 }
 
 .react-shell {
     padding: var(--space-4);
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(246, 251, 251, 0.92));
+    background: linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--surface-strong) 94%, var(--bg)),
+        color-mix(in srgb, var(--surface) 92%, var(--bg))
+    );
     box-shadow: var(--shadow-soft);
 }
 

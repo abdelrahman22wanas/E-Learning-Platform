@@ -7,6 +7,7 @@ A Django-based e-learning platform with courses, lessons, enrollments, and progr
 - Course creation and management
 - Ordered lessons with video/text/PDF support
 - Enrollment tracking
+- Role-based users: student, instructor, admin
 - Lesson completion and progress percentage
 - Student and instructor dashboards
 - JWT authentication for API access
@@ -15,12 +16,14 @@ A Django-based e-learning platform with courses, lessons, enrollments, and progr
 - Backend: Django 5, Django REST Framework
 - Auth: SimpleJWT + Django sessions
 - Database: SQLite (dev), PostgreSQL-ready
+- Backend: Django 5, Django REST Framework
 - Frontend: Django templates + custom CSS
 - Frontend (new): React + Vite, modern glassmorphism UI, animated cards, and gradient buttons
 
 ## Requirements
 - Python 3.12+
 
+- Python 3.12+
 ## Setup
 1. Create and activate a virtual environment.
 2. Install dependencies:
@@ -28,32 +31,40 @@ A Django-based e-learning platform with courses, lessons, enrollments, and progr
 3. Apply migrations:
    - `D:/PROJECTS/E-Learning/.venv/Scripts/python.exe manage.py migrate`
 4. (Optional) Seed sample data:
+- The new React frontend lives in the `frontend/` folder.
    - `D:/PROJECTS/E-Learning/.venv/Scripts/python.exe manage.py seed_data`
 5. Run the server:
+- This project is configured for Vercel with a Python serverless entrypoint at `api/index.py`.
    - `D:/PROJECTS/E-Learning/.venv/Scripts/python.exe manage.py runserver`
 
+- If `DATABASE_URL` is not provided, SQLite is used (good for local development, not recommended for production on serverless).
 ## React Frontend
 The new React frontend lives in the `frontend/` folder.
 
 1. Install Node dependencies:
+- `POST /api/register/`
    - `cd frontend`
    - `npm install`
 2. Start the frontend:
    - `npm run dev`
 3. If your Django API is running on a different host or port, set:
    - `VITE_API_BASE_URL=http://127.0.0.1:8000/api`
+- Admin: `admin` / `AdminPass123`
 
 The Vite dev server proxies `/api` to Django by default.
 
 ## Deploy on Vercel
 This project is configured for Vercel with a Python serverless entrypoint at `api/index.py`.
+- `/` Home
 
 1. Import this repository in Vercel.
 2. In Vercel Project Settings, set these environment variables:
    - `SECRET_KEY` (required)
    - `DEBUG=False`
+- ```text
    - `ALLOWED_HOSTS=.vercel.app`
    - `CSRF_TRUSTED_ORIGINS=https://*.vercel.app`
+   - `ADMIN_PATH=<random-secret-admin-path>`
    - `DATABASE_URL` (recommended for production, e.g., Neon/Supabase/Postgres)
 3. Run database migrations against your production database:
    - `python manage.py migrate`
@@ -62,6 +73,7 @@ This project is configured for Vercel with a Python serverless entrypoint at `ap
 Notes:
 - If `DATABASE_URL` is not provided, SQLite is used (good for local development, not recommended for production on serverless).
 - Static files are served with WhiteNoise and Vercel static routing.
+- Admin URL is no longer fixed to `/admin/`; it uses `ADMIN_PATH` from environment.
 
 ## API Endpoints
 - `POST /api/register/`

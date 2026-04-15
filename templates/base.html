@@ -5,6 +5,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}E-Learning Platform{% endblock %}</title>
+    <script>
+        (function () {
+            var root = document.documentElement;
+            var storedTheme = null;
+            try {
+                storedTheme = localStorage.getItem('theme');
+            } catch (error) {
+                storedTheme = null;
+            }
+            var systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var initialTheme = storedTheme || (systemPrefersDark ? 'dark' : 'light');
+            root.setAttribute('data-theme', initialTheme);
+            root.style.colorScheme = initialTheme;
+        })();
+    </script>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 </head>
 <body>
