@@ -39,6 +39,19 @@ def _attach_course_metadata(courses, user=None):
     return courses
 
 
+def _serialize_course(course):
+    return {
+        "id": course.id,
+        "title": course.title,
+        "category": course.category,
+        "description": course.description,
+        "lesson_count": getattr(course, "lesson_count", 0),
+        "level_label": getattr(course, "level_label", "Beginner"),
+        "estimated_duration": getattr(course, "estimated_duration", "30 min"),
+        "completion_percent": getattr(course, "completion_percent", None),
+    }
+
+
 def home(request):
     try:
         featured_courses = _attach_course_metadata(
@@ -60,9 +73,15 @@ def home(request):
         else:
             recommended_courses = featured_courses[:3]
             recommendations_title = "Start with these courses"
+
+        spotlight_courses = _attach_course_metadata(
+            Course.objects.select_related("instructor").order_by("-created_at")[:8],
+            request.user,
+        )
     except DatabaseError:
         featured_courses = []
         recommended_courses = []
+        spotlight_courses = []
         recommendations_title = "Start with these courses"
     return render(
         request,
@@ -71,6 +90,7 @@ def home(request):
             "featured_courses": featured_courses,
             "recommended_courses": recommended_courses,
             "recommendations_title": recommendations_title,
+            "spotlight_courses": [_serialize_course(course) for course in spotlight_courses],
         },
     )
 

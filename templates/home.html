@@ -3,6 +3,8 @@
 {% block title %}Home - E-Learning{% endblock %}
 
 {% block content %}
+{{ spotlight_courses|json_script:"spotlight-courses-data" }}
+
 <section class="hero reveal">
     <div class="hero-grid">
         <div>
@@ -20,6 +22,14 @@
             {% include 'components/stat_tile.html' with label='Tracking' value='Live Progress' hint='Stay consistent and finish' %}
         </div>
     </div>
+</section>
+
+<section class="section-block reveal">
+    <div class="section-head">
+        <h2>React course explorer</h2>
+        <span class="pill">Interactive</span>
+    </div>
+    <div id="course-explorer-root" class="react-shell"></div>
 </section>
 
 <section class="section-block">

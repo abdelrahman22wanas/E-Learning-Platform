@@ -172,7 +172,7 @@ a {
     color: var(--text);
 }
 
-.nav a::after {
+.nav a::after,
 .nav-link-button::after {
     content: "";
     position: absolute;
@@ -371,6 +371,29 @@ a {
     box-shadow: 0 12px 22px rgba(15, 140, 140, 0.28);
 }
 
+.button--secondary {
+    background: linear-gradient(135deg, #ff8a5b, #f35c84);
+    box-shadow: 0 10px 20px rgba(243, 92, 132, 0.18);
+}
+
+.button--secondary:hover,
+.button--secondary:focus-visible {
+    box-shadow: 0 14px 24px rgba(243, 92, 132, 0.3);
+}
+
+.button--ghost {
+    background: var(--surface-strong);
+    color: var(--accent-dark);
+    border: 1px solid var(--border);
+    box-shadow: none;
+}
+
+.button--ghost:hover,
+.button--ghost:focus-visible {
+    background: var(--accent-soft);
+    box-shadow: none;
+}
+
 .text-link {
     color: var(--accent-dark);
     text-decoration: none;
@@ -457,6 +480,98 @@ a {
 
 .continue-panel {
     background: linear-gradient(135deg, #fffdfa 0%, #f0fcfb 100%);
+}
+
+.react-shell {
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.96), rgba(246, 251, 251, 0.92));
+    box-shadow: var(--shadow-soft);
+}
+
+.react-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-3);
+}
+
+.react-search {
+    min-width: min(100%, 320px);
+    flex: 1;
+}
+
+.react-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+}
+
+.react-chip {
+    border: 1px solid var(--border);
+    background: var(--surface-strong);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 0.45rem 0.8rem;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        transform var(--duration-fast) var(--ease-standard),
+        background var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard),
+        box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+.react-chip:hover,
+.react-chip:focus-visible,
+.react-chip.is-active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #fff;
+    box-shadow: 0 10px 20px rgba(15, 140, 140, 0.18);
+    transform: translateY(-1px);
+}
+
+.react-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-3);
+}
+
+.react-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.react-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(15, 140, 140, 0.08), rgba(243, 92, 132, 0.06));
+    opacity: 0;
+    transition: opacity var(--duration-normal) var(--ease-standard);
+    pointer-events: none;
+}
+
+.react-card:hover::before {
+    opacity: 1;
+}
+
+.react-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    margin: var(--space-2) 0;
+}
+
+.react-empty {
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--surface-strong);
+    border: 1px dashed var(--border);
 }
 
 .lesson-list {
