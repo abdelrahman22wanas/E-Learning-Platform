@@ -155,6 +155,11 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
+# On Vercel, static collection artifacts are not persisted between builds in repo.
+# Let WhiteNoise locate static assets directly from app/static directories.
+if os.environ.get('VERCEL') == '1':
+    WHITENOISE_USE_FINDERS = True
+
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SESSION_COOKIE_SECURE = True

@@ -2,6 +2,8 @@
 
 :root {
     --bg: #faf6ef;
+    --bg-glow-1: #f6ead6;
+    --bg-glow-2: #d8f1ef;
     --surface: #fffdf8;
     --surface-strong: #fff;
     --text: #201e1a;
@@ -26,6 +28,22 @@
     --ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
+:root[data-theme="dark"] {
+    --bg: #0a1116;
+    --bg-glow-1: #152533;
+    --bg-glow-2: #0d3834;
+    --surface: #111c24;
+    --surface-strong: #162530;
+    --text: #e9f0f4;
+    --muted: #9fb0bb;
+    --accent: #27b6c2;
+    --accent-dark: #1e97a1;
+    --accent-soft: #1b3a43;
+    --border: #27404d;
+    --shadow-soft: 0 18px 36px rgba(0, 0, 0, 0.36);
+    --shadow-card: 0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -42,8 +60,8 @@ body {
     color: var(--text);
     line-height: 1.6;
     background:
-        radial-gradient(circle at 18% 6%, #f6ead6 0%, transparent 40%),
-        radial-gradient(circle at 82% 0%, #d8f1ef 0%, transparent 36%),
+    radial-gradient(circle at 18% 6%, var(--bg-glow-1) 0%, transparent 40%),
+    radial-gradient(circle at 82% 0%, var(--bg-glow-2) 0%, transparent 36%),
         var(--bg);
 }
 
@@ -131,6 +149,27 @@ a {
     background: var(--surface-strong);
     padding: 0.45rem 0.9rem;
     font-weight: 600;
+}
+
+.theme-toggle {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface-strong);
+    color: var(--text);
+    padding: 0.45rem 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        transform var(--duration-fast) var(--ease-standard),
+        box-shadow var(--duration-fast) var(--ease-standard),
+        background var(--duration-fast) var(--ease-standard);
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-card);
+    background: color-mix(in srgb, var(--accent-soft) 70%, var(--surface-strong));
 }
 
 .nav {
@@ -502,6 +541,27 @@ a {
 .react-search {
     min-width: min(100%, 320px);
     flex: 1;
+    padding: 0.72rem 0.9rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface-strong);
+    color: var(--text);
+    font: inherit;
+    transition:
+        border-color var(--duration-fast) var(--ease-standard),
+        box-shadow var(--duration-fast) var(--ease-standard),
+        transform var(--duration-fast) var(--ease-standard);
+}
+
+.react-search::placeholder {
+    color: var(--muted);
+}
+
+.react-search:focus {
+    outline: none;
+    border-color: color-mix(in srgb, var(--accent) 62%, var(--border));
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+    transform: translateY(-1px);
 }
 
 .react-filters {
@@ -635,6 +695,10 @@ a {
 }
 
 @media (max-width: 760px) {
+    .header-content {
+        flex-wrap: wrap;
+    }
+
     .menu-toggle {
         display: inline-flex;
     }

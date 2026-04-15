@@ -2,6 +2,30 @@
     var root = document.documentElement;
     root.classList.add("js-enabled");
 
+    var themeToggleButton = document.querySelector("[data-theme-toggle]");
+    var storedTheme = localStorage.getItem("theme");
+    var systemPrefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    function applyTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        if (themeToggleButton) {
+            themeToggleButton.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+            themeToggleButton.setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+        }
+    }
+
+    var initialTheme = storedTheme || (systemPrefersDark ? "dark" : "light");
+    applyTheme(initialTheme);
+
+    if (themeToggleButton) {
+        themeToggleButton.addEventListener("click", function () {
+            var currentTheme = root.getAttribute("data-theme") || "light";
+            var nextTheme = currentTheme === "dark" ? "light" : "dark";
+            localStorage.setItem("theme", nextTheme);
+            applyTheme(nextTheme);
+        });
+    }
+
     var menuButton = document.querySelector("[data-menu-toggle]");
     var nav = document.querySelector("[data-nav]");
 
