@@ -16,6 +16,7 @@ A Django-based e-learning platform with courses, lessons, enrollments, and progr
 - Auth: SimpleJWT + Django sessions
 - Database: SQLite (dev), PostgreSQL-ready
 - Frontend: Django templates + custom CSS
+- Frontend (new): React + Vite, modern glassmorphism UI, animated cards, and gradient buttons
 
 ## Requirements
 - Python 3.12+
@@ -30,6 +31,19 @@ A Django-based e-learning platform with courses, lessons, enrollments, and progr
    - `D:/PROJECTS/E-Learning/.venv/Scripts/python.exe manage.py seed_data`
 5. Run the server:
    - `D:/PROJECTS/E-Learning/.venv/Scripts/python.exe manage.py runserver`
+
+## React Frontend
+The new React frontend lives in the `frontend/` folder.
+
+1. Install Node dependencies:
+   - `cd frontend`
+   - `npm install`
+2. Start the frontend:
+   - `npm run dev`
+3. If your Django API is running on a different host or port, set:
+   - `VITE_API_BASE_URL=http://127.0.0.1:8000/api`
+
+The Vite dev server proxies `/api` to Django by default.
 
 ## Deploy on Vercel
 This project is configured for Vercel with a Python serverless entrypoint at `api/index.py`.
@@ -75,6 +89,11 @@ Notes:
 
 ## Project Structure
 ```
+frontend/
+   index.html
+   package.json
+   vite.config.js
+   src/
 elearning/
    settings.py
    urls.py
@@ -111,3 +130,5 @@ templates/
 static/
    css/styles.css
 ```
+
+The Django templates remain available as a server-rendered fallback and admin-facing view layer, while the React app in `frontend/` is the primary modern UI.
