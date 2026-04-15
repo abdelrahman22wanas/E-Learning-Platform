@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db import DatabaseError
 from django.shortcuts import get_object_or_404, render
 
 from courses.models import Course
@@ -9,21 +10,28 @@ from users.models import User
 
 
 def home(request):
-    featured_courses = Course.objects.select_related("instructor").order_by("-created_at")[:6]
+    try:
+        featured_courses = Course.objects.select_related("instructor").order_by("-created_at")[:6]
+    except DatabaseError:
+        featured_courses = []
     return render(request, "home.html", {"featured_courses": featured_courses})
 
 
 def course_list(request):
     query = request.GET.get("q", "").strip()
     category = request.GET.get("category", "").strip()
-    courses = Course.objects.select_related("instructor")
+    try:
+        courses = Course.objects.select_related("instructor")
 
-    if query:
-        courses = courses.filter(title__icontains=query)
-    if category:
-        courses = courses.filter(category__iexact=category)
+        if query:
+            courses = courses.filter(title__icontains=query)
+        if category:
+            courses = courses.filter(category__iexact=category)
 
-    categories = Course.objects.values_list("category", flat=True).distinct()
+        categories = Course.objects.values_list("category", flat=True).distinct()
+    except DatabaseError:
+        courses = []
+        categories = []
     return render(
         request,
         "courses/course_list.html",
@@ -37,14 +45,20 @@ def course_list(request):
 
 
 def course_detail(request, course_id):
-    course = get_object_or_404(Course.objects.select_related("instructor"), pk=course_id)
-    lessons = Lesson.objects.filter(course=course).order_by("order")
-    enrollment = None
-    progress = None
+    try:
+        course = get_object_or_404(Course.objects.select_related("instructor"), pk=course_id)
+        lessons = Lesson.objects.filter(course=course).order_by("order")
+        enrollment = None
+        progress = None
 
-    if request.user.is_authenticated:
-        enrollment = Enrollment.objects.filter(course=course, student=request.user).first()
-        progress = CourseProgress.objects.filter(course=course, student=request.user).first()
+        if request.user.is_authenticated:
+            enrollment = Enrollment.objects.filter(course=course, student=request.user).first()
+            progress = CourseProgress.objects.filter(course=course, student=request.user).first()
+    except DatabaseError:
+        course = None
+        lessons = []
+        enrollment = None
+        progress = None
 
     return render(
         request,
@@ -59,20 +73,27 @@ def course_detail(request, course_id):
 
 
 def lesson_detail(request, lesson_id):
-    lesson = get_object_or_404(Lesson.objects.select_related("course"), pk=lesson_id)
+    try:
+        lesson = get_object_or_404(Lesson.objects.select_related("course"), pk=lesson_id)
+    except DatabaseError:
+        lesson = None
     return render(request, "lessons/lesson_detail.html", {"lesson": lesson})
 
 
 @login_required
 def student_dashboard(request):
-    enrollments = (
-        Enrollment.objects.filter(student=request.user)
-        .select_related("course")
-        .order_by("-enrolled_at")
-    )
-    progress_entries = CourseProgress.objects.filter(student=request.user).select_related(
-        "course", "last_accessed_lesson"
-    )
+    try:
+        enrollments = (
+            Enrollment.objects.filter(student=request.user)
+            .select_related("course")
+            .order_by("-enrolled_at")
+        )
+        progress_entries = CourseProgress.objects.filter(student=request.user).select_related(
+            "course", "last_accessed_lesson"
+        )
+    except DatabaseError:
+        enrollments = []
+        progress_entries = []
 
     return render(
         request,
@@ -89,8 +110,12 @@ def instructor_dashboard(request):
     if request.user.role != User.Role.INSTRUCTOR and request.user.role != User.Role.ADMIN:
         return render(request, "dashboards/instructor_dashboard.html", {"courses": []})
 
-    courses = Course.objects.filter(instructor=request.user).order_by("-created_at")
-    enrollments = Enrollment.objects.filter(course__in=courses).count()
+    try:
+        courses = Course.objects.filter(instructor=request.user).order_by("-created_at")
+        enrollments = Enrollment.objects.filter(course__in=courses).count()
+    except DatabaseError:
+        courses = []
+        enrollments = 0
 
     return render(
         request,
