@@ -60,8 +60,10 @@ Notes:
 - `POST /api/progress/update/`
 
 ## Sample Accounts
+- Admin: `admin` / `AdminPass123`
 - Instructor: `instructor` / `InstructorPass123`
 - Student: `student` / `StudentPass123`
+- Student: `student2` / `StudentPass123`
 
 ## Web Pages
 - `/` Home
