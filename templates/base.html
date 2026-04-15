@@ -21,7 +21,10 @@
                 <a href="{% url 'student_dashboard' %}">Student Dashboard</a>
                 <a href="{% url 'instructor_dashboard' %}">Instructor Dashboard</a>
                 {% if request.user.is_authenticated %}
-                <a href="{% url 'logout' %}">Sign out</a>
+                <form method="post" action="{% url 'logout' %}" class="nav-inline-form">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-link-button">Sign out</button>
+                </form>
                 {% else %}
                 <a href="{% url 'login' %}">Sign in</a>
                 {% endif %}

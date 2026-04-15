@@ -3,22 +3,24 @@
 {% block title %}{{ course.title }} - E-Learning{% endblock %}
 
 {% block content %}
+{% if course %}
 <section class="course-header">
-    <div>
+    <div class="reveal">
+        <p class="eyebrow">Course details</p>
         <h1>{{ course.title }}</h1>
         <p class="muted">Category: {{ course.category }}</p>
         <p>{{ course.description }}</p>
         <p class="muted">Instructor: {{ course.instructor.username }}</p>
         {% if progress %}
         <div class="progress-bar">
-            <div class="progress" style="width: {{ progress.progress_percent }}%;"></div>
+            <div class="progress" data-progress="{{ progress.progress_percent }}"></div>
         </div>
         <p class="muted">Progress: {{ progress.progress_percent }}%</p>
         {% endif %}
     </div>
 </section>
 
-<section>
+<section class="section-block">
     <h2>Lessons</h2>
     <ol class="lesson-list">
         {% for lesson in lessons %}
@@ -31,4 +33,7 @@
         {% endfor %}
     </ol>
 </section>
+{% else %}
+{% include 'components/empty_state.html' with title='Course unavailable' message='The course could not be loaded right now.' cta_url='/courses/' cta_label='Back to courses' %}
+{% endif %}
 {% endblock %}

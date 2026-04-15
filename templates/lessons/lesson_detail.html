@@ -3,7 +3,9 @@
 {% block title %}{{ lesson.title }} - E-Learning{% endblock %}
 
 {% block content %}
+{% if lesson %}
 <section>
+    <p class="eyebrow">Lesson</p>
     <h1>{{ lesson.title }}</h1>
     <p class="muted">Course: {{ lesson.course.title }}</p>
 
@@ -17,4 +19,7 @@
         </div>
     {% endif %}
 </section>
+{% else %}
+{% include 'components/empty_state.html' with title='Lesson unavailable' message='This lesson could not be loaded right now.' cta_url='/courses/' cta_label='Back to courses' %}
+{% endif %}
 {% endblock %}

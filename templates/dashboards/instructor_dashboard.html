@@ -3,28 +3,27 @@
 {% block title %}Instructor Dashboard - E-Learning{% endblock %}
 
 {% block content %}
-<section class="page-header">
+<section class="page-header reveal">
+    <p class="eyebrow">Instructor workspace</p>
     <h1>Instructor Dashboard</h1>
     <p class="muted">Manage your courses and monitor enrollments.</p>
 </section>
 
-<section>
-    <h2>Your Courses</h2>
-    <div class="card-grid">
-        {% for course in courses %}
-        <article class="card">
-            <h3>{{ course.title }}</h3>
-            <p class="muted">{{ course.category }}</p>
-            <a class="text-link" href="/courses/{{ course.id }}/">View course</a>
-        </article>
-        {% empty %}
-        <p>No courses created yet.</p>
-        {% endfor %}
+<section class="section-block">
+    <div class="metric-grid metric-grid-compact">
+        {% include 'components/stat_tile.html' with label='Your courses' value=courses|length hint='Published learning paths' %}
+        {% include 'components/stat_tile.html' with label='Total enrollments' value=enrollment_count|default:0 hint='Across all your courses' %}
     </div>
 </section>
 
-<section>
-    <h2>Engagement</h2>
-    <p>Total enrollments across your courses: {{ enrollment_count|default:0 }}</p>
+<section class="section-block">
+    <h2>Your Courses</h2>
+    <div class="card-grid">
+        {% for course in courses %}
+        {% include 'components/course_card.html' with course=course %}
+        {% empty %}
+        {% include 'components/empty_state.html' with title='No courses created yet' message='Create your first course from admin to start teaching.' cta_url='/admin/' cta_label='Open admin' %}
+        {% endfor %}
+    </div>
 </section>
 {% endblock %}

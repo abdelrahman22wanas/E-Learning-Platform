@@ -15,6 +15,21 @@
 
     var revealNodes = document.querySelectorAll(".reveal");
     if (!revealNodes.length) {
+        // Continue to process progress bars even if no reveal blocks exist.
+    }
+
+    var progressBars = document.querySelectorAll(".progress[data-progress]");
+    progressBars.forEach(function (bar) {
+        var raw = Number(bar.getAttribute("data-progress"));
+        if (Number.isNaN(raw)) {
+            bar.style.width = "0%";
+            return;
+        }
+        var bounded = Math.max(0, Math.min(100, raw));
+        bar.style.width = bounded + "%";
+    });
+
+    if (!revealNodes.length) {
         return;
     }
 
