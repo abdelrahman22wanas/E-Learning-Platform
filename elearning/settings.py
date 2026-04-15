@@ -27,6 +27,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev-key-change-me')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+if os.environ.get('VERCEL') == '1':
+    DEBUG = False
 
 ALLOWED_HOSTS = [
     host.strip()
@@ -94,9 +96,18 @@ WSGI_APPLICATION = 'elearning.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+database_url = os.environ.get('DATABASE_URL', '').strip()
+if not database_url:
+    database_url = f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+
+# Relative sqlite paths (e.g., sqlite:///db.sqlite3) are problematic on Vercel.
+# Use /tmp which is writable in serverless runtime.
+if os.environ.get('VERCEL') == '1' and database_url.startswith('sqlite:///') and not database_url.startswith('sqlite:////'):
+    database_url = 'sqlite:////tmp/db.sqlite3'
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+    'default': dj_database_url.parse(
+        database_url,
         conn_max_age=600,
         ssl_require=not DEBUG,
     )
