@@ -148,10 +148,20 @@ a {
 }
 
 .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
     font-family: "Outfit", "Segoe UI", sans-serif;
     font-size: 1.4rem;
     font-weight: 800;
     text-decoration: none;
+}
+
+.logo-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(15, 140, 140, 0.22);
 }
 
 .menu-toggle {

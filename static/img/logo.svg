@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">E-Learning Platform Logo</title>
+  <desc id="desc">Open book with a play button inside.</desc>
+  <defs>
+    <linearGradient id="cover" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f8c8c" />
+      <stop offset="100%" stop-color="#27b6c2" />
+    </linearGradient>
+  </defs>
+  <rect x="8" y="12" width="112" height="104" rx="24" fill="url(#cover)" />
+  <path d="M28 36c14 0 23 4 30 11V95c-7-7-16-11-30-11V36Zm72 0c-14 0-23 4-30 11V95c7-7 16-11 30-11V36Z" fill="#ffffff" fill-opacity="0.95" />
+  <path d="M64 51 80 61 64 71Z" fill="#0f8c8c" />
+  <circle cx="64" cy="61" r="19" fill="none" stroke="#0f8c8c" stroke-width="4" opacity="0.25" />
+</svg>

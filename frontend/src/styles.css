@@ -109,8 +109,25 @@ select {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.56rem;
   font-size: 1.4rem;
   font-weight: 800;
+  background: linear-gradient(90deg, #fff, #a8a0ff 60%, #69f4ff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.brand-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(39, 182, 194, 0.28);
+  flex-shrink: 0;
+}
+
+.brand-text {
   background: linear-gradient(90deg, #fff, #a8a0ff 60%, #69f4ff);
   -webkit-background-clip: text;
   color: transparent;

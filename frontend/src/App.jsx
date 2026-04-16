@@ -35,7 +35,10 @@ function Layout({ children }) {
   return (
     <div className="app-shell">
       <header className="topbar glass">
-        <a className="brand" href="#/">E-Learning</a>
+        <a className="brand" href="#/">
+          <img className="brand-logo" src="/logo.svg" alt="E-Learning logo" width="34" height="34" />
+          <span className="brand-text">E-Learning</span>
+        </a>
         <button className="icon-button mobile-only" onClick={() => setMenuOpen((value) => !value)}>
           Menu
         </button>

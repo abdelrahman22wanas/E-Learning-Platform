@@ -5,6 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}E-Learning Platform{% endblock %}</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/logo.svg' %}" />
+    <link rel="shortcut icon" href="{% static 'img/logo.svg' %}" />
     <script>
         (function () {
             var root = document.documentElement;
@@ -27,7 +29,10 @@
 
     <header class="site-header">
         <div class="container header-content">
-            <a class="logo" href="{% url 'home' %}">E-Learning</a>
+            <a class="logo" href="{% url 'home' %}">
+                <img class="logo-mark" src="{% static 'img/logo.svg' %}" alt="E-Learning logo" width="34" height="34" />
+                <span>E-Learning</span>
+            </a>
             <button class="theme-toggle" type="button" aria-label="Toggle dark mode" data-theme-toggle>
                 Dark mode
             </button>
